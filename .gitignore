@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# Logs / OS / editor
+*.log
+.DS_Store
+.vscode/
+.idea/
