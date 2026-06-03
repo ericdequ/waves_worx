@@ -16,6 +16,10 @@ export { chunk, Reassembler, DEFAULT_CHUNK_BYTES } from './chunk.js';
 // channel — one interface over every physical/local transport
 export { CHANNEL_KINDS, assertChannel, pickChannel, createLoopbackBus, createLoopbackChannel } from './channel.js';
 
+// modem — send bytes over sound (FSK codec)
+export { encode, decode, modemBand, DEFAULT_MODEM } from './modem.js';
+
 // arcade — consensual proximity primitives
 export { normalizeRoomCode, generateRoomCode, isRoomCode, ROOM_CODE_LENGTH } from './roomcode.js';
 export { createProximityProof, verifyProximityProof, normalizeBits, PROXIMITY_PROOF_VERSION, DEFAULT_FRAME_MS } from './proximity.js';
+export { createPairing, PAIRING_STATE, PAIRING_VERSION } from './pairing.js';

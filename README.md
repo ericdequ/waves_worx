@@ -18,11 +18,12 @@ Pure JavaScript, zero dependencies, node-testable.
 ## The stack
 
 ```
-  arcade        room code · proximity proof   ← demo / pair / prove co-location
-  ────────────────────────────────────────
-  channel       one interface, many media     ← BLE · sound · light · QR · LAN
-  chunk         sequenced, CRC'd, reassembled  ← survive low-bandwidth + loss
-  frame         bytes ⇄ base64url ⇄ JSON · CRC ← the universal byte layer
+  arcade        room code · proximity proof · pairing   ← pair / prove co-location
+  ──────────────────────────────────────────────────
+  modem         bytes ⇄ FSK tones                       ← send data over sound
+  channel       one interface, many media               ← BLE · sound · light · QR · LAN
+  chunk         sequenced, CRC'd, reassembled            ← survive low-bandwidth + loss
+  frame         bytes ⇄ base64url ⇄ JSON · CRC          ← the universal byte layer
 ```
 
 ### frame — the universal byte layer
@@ -53,6 +54,37 @@ available; `createLoopbackChannel()` models "devices in radio range" for tests
 and single-process demos. Implement `send` / `subscribe` to add a real BLE /
 sound / light / WebRTC backend.
 
+### modem — send bytes over sound
+
+A frequency-shift-keying codec: each nibble becomes one of 16 tones, a preamble
+syncs the receiver, a checksum byte guards integrity. It's **pure** — bytes →
+`{ freqHz, durationMs }` tones and back — so it's fully testable without audio
+hardware (a real speaker/mic is a thin adapter on top).
+
+```js
+import { encode, decode } from 'waves_worx';
+const tones = encode('meet at 9');          // → play these through a speaker
+const out = decode(observedFreqs);          // ← from a mic pitch tracker
+// out → { ok, bytes, reason }   tolerant of frequency jitter; checksum-guarded
+```
+
+### pairing — establish a session, no cloud
+
+A three-message handshake (offer → answer → confirm) two devices run over any
+channel to agree on a shared session id bound to the room code. Side-effect-free
+state machine: feed in received messages, get the next message to send.
+
+```js
+import { createPairing } from 'waves_worx';
+const a = createPairing({ roomCode, role: 'initiator' });
+const b = createPairing({ roomCode, role: 'responder' });
+// a.start() → b.receive() → a.receive() → b.receive()  ⇒ a.session === b.session
+```
+
+Both sides derive the **same** session id only by completing the exchange; a
+wrong room code or tampered confirm fails closed. Combine with the proximity
+proof when you also need to prove physical co-location.
+
 ### arcade — prove you're actually here
 
 The headline demo. One device **flashes** a light/screen pattern (preamble +
@@ -79,12 +111,17 @@ a wrong token outright — the anti-spoof property.
 node --test test/*.test.mjs
 ```
 
-13 cases: CRC vector, out-of-order + corrupted reassembly, loopback transfer,
+22 cases: CRC vector, out-of-order + corrupted reassembly, loopback transfer,
+modem round-trip / jitter-tolerance / checksum, pairing handshake + fail-closed,
 room-code normalization, and proximity verify / noise-tolerance / anti-spoof.
 
 ## Roadmap
 
-Real channel backends behind the `channel` contract — Web Bluetooth, an
-ultrasonic `AudioContext` modem, a camera/light observer for the proximity
-proof — each a drop-in `{ kind, send, subscribe }`. The pure cores here
-(framing, chunking, proof) are the parts worth getting provably right first.
+- **Real channel backends** behind the `channel` contract — Web Bluetooth, an
+  ultrasonic `AudioContext` driver for the modem (`encode` → oscillator,
+  mic FFT → `decode`), a camera/light observer for the proximity proof — each a
+  drop-in `{ kind, send, subscribe }`.
+- **Go mesh core** — BEV's parked `bevmesh` / `bevcore` transport (native +
+  WASM, no-cloud peer mesh) lands here once it's decoupled from the BEV core
+  build. The pure JS cores in this repo (framing, chunking, modem, proof,
+  pairing) are the contract that Go side will match.
