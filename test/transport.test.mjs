@@ -1,16 +1,16 @@
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { test } from 'node:test';
 
 import {
-  toBytes,
-  crc32,
-  bytesToBase64Url,
   base64UrlToBytes,
+  bytesToBase64Url,
   chunk,
-  Reassembler,
+  crc32,
   createLoopbackBus,
   createLoopbackChannel,
   pickChannel,
+  Reassembler,
+  toBytes,
 } from '../src/index.js';
 
 test('frame: base64url round-trips arbitrary bytes', () => {

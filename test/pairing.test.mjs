@@ -1,7 +1,7 @@
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { test } from 'node:test';
 
-import { createPairing, PAIRING_STATE, createLoopbackBus, createLoopbackChannel } from '../src/index.js';
+import { createLoopbackBus, createLoopbackChannel,createPairing, PAIRING_STATE } from '../src/index.js';
 
 // Fixed nonces so the derived session is deterministic.
 const initiator = (code) => createPairing({ roomCode: code, role: 'initiator', nonce: () => 'AAAA' });

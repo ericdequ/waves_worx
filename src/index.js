@@ -8,18 +8,18 @@
 // =============================================================================
 
 // frame — the universal byte layer
-export { toBytes, cloneBytes, encodeJSON, decodeJSON, bytesToBase64, base64ToBytes, bytesToBase64Url, base64UrlToBytes, crc32 } from './frame.js';
+export { base64ToBytes, base64UrlToBytes, bytesToBase64, bytesToBase64Url, cloneBytes, crc32,decodeJSON, encodeJSON, toBytes } from './frame.js';
 
 // chunk — send a payload over a low-bandwidth, lossy channel
-export { chunk, Reassembler, DEFAULT_CHUNK_BYTES } from './chunk.js';
+export { chunk, DEFAULT_CHUNK_BYTES,Reassembler } from './chunk.js';
 
 // channel — one interface over every physical/local transport
-export { CHANNEL_KINDS, assertChannel, pickChannel, createLoopbackBus, createLoopbackChannel } from './channel.js';
+export { assertChannel, CHANNEL_KINDS, createLoopbackBus, createLoopbackChannel,pickChannel } from './channel.js';
 
 // modem — send bytes over sound (FSK codec)
-export { encode, decode, modemBand, DEFAULT_MODEM } from './modem.js';
+export { decode, DEFAULT_MODEM,encode, modemBand } from './modem.js';
 
 // arcade — consensual proximity primitives
-export { normalizeRoomCode, generateRoomCode, isRoomCode, ROOM_CODE_LENGTH } from './roomcode.js';
-export { createProximityProof, verifyProximityProof, normalizeBits, PROXIMITY_PROOF_VERSION, DEFAULT_FRAME_MS } from './proximity.js';
 export { createPairing, PAIRING_STATE, PAIRING_VERSION } from './pairing.js';
+export { createProximityProof, DEFAULT_FRAME_MS,normalizeBits, PROXIMITY_PROOF_VERSION, verifyProximityProof } from './proximity.js';
+export { generateRoomCode, isRoomCode, normalizeRoomCode, ROOM_CODE_LENGTH } from './roomcode.js';

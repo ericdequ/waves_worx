@@ -1,7 +1,7 @@
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { test } from 'node:test';
 
-import { encode, decode, modemBand, toBytes } from '../src/index.js';
+import { decode, encode, modemBand, toBytes } from '../src/index.js';
 
 test('modem: encode → decode round-trips a payload', () => {
   const tones = encode('hello waves');

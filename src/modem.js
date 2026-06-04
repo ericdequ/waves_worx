@@ -11,7 +11,7 @@
 // No cloud: two phones in the same room exchange data through the air.
 // =============================================================================
 
-import { toBytes, crc32 } from './frame.js';
+import { crc32,toBytes } from './frame.js';
 
 const SYMBOLS = 16; // one nibble per tone
 

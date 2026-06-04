@@ -13,8 +13,8 @@
 // prove physical co-location, not just message exchange.
 // =============================================================================
 
-import { normalizeRoomCode } from './roomcode.js';
 import { crc32 } from './frame.js';
+import { normalizeRoomCode } from './roomcode.js';
 
 export const PAIRING_VERSION = 1;
 export const PAIRING_STATE = Object.freeze({

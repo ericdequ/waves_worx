@@ -1,11 +1,11 @@
-import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { test } from 'node:test';
 
 import {
-  normalizeRoomCode,
+  createProximityProof,
   generateRoomCode,
   isRoomCode,
-  createProximityProof,
+  normalizeRoomCode,
   verifyProximityProof,
 } from '../src/index.js';
 

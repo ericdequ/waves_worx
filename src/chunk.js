@@ -10,7 +10,7 @@
 // carries the frames — pair it with any channel from ./channel.js.
 // =============================================================================
 
-import { toBytes, crc32 } from './frame.js';
+import { crc32,toBytes } from './frame.js';
 
 export const DEFAULT_CHUNK_BYTES = 180; // fits a comfortably-scannable QR
 
