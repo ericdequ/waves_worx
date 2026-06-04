@@ -129,3 +129,18 @@ room-code normalization, and proximity verify / noise-tolerance / anti-spoof.
   The JS cores here (framing, chunking, modem, proof, pairing) are the contract
   the Go side matches — polyglot, like TST. Remaining cutover: publish `go/` →
   BEV `require`s it → delete BEV's copy.
+
+## Improving this library
+
+This library is meant to keep getting **better and more versatile through use**.
+When you adopt it in a project and hit a gap — a missing variant, an awkward
+API, a pattern worth generalizing — don't work around it locally:
+
+1. Note it under **Usage learnings** below (or open an issue on this repo).
+2. When the value is clear, **extend the library** (new export / variant / game /
+   contract), add a test, then update the consumer. Prefer composition over
+   variant sprawl, and keep it tested.
+
+### Usage learnings
+
+- _(append discoveries here as the library gets used — date + project + the change)_
