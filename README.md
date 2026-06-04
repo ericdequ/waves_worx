@@ -121,7 +121,11 @@ room-code normalization, and proximity verify / noise-tolerance / anti-spoof.
   ultrasonic `AudioContext` driver for the modem (`encode` → oscillator,
   mic FFT → `decode`), a camera/light observer for the proximity proof — each a
   drop-in `{ kind, send, subscribe }`.
-- **Go mesh core** — BEV's parked `bevmesh` / `bevcore` transport (native +
-  WASM, no-cloud peer mesh) lands here once it's decoupled from the BEV core
-  build. The pure JS cores in this repo (framing, chunking, modem, proof,
-  pairing) are the contract that Go side will match.
+- **Go mesh core — landed** (`go/`, module `github.com/ericdequ/waves_worx/go`).
+  BEV's `bevcore/transport` was decoupled from the BEV core (registry inversion;
+  `bevcore` now has 0 transport deps) and lifted here as a standalone stdlib-only
+  Go module: BLE / sonic / NFC / UWB / Wi-Fi / VLC channels + a peer-trust
+  aggregator + fallback ladder. 8 packages, all tests pass. See [`go/README.md`](go/README.md).
+  The JS cores here (framing, chunking, modem, proof, pairing) are the contract
+  the Go side matches — polyglot, like TST. Remaining cutover: publish `go/` →
+  BEV `require`s it → delete BEV's copy.
