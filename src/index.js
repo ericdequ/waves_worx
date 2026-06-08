@@ -16,6 +16,19 @@ export { chunk, DEFAULT_CHUNK_BYTES,Reassembler } from './chunk.js';
 // channel — one interface over every physical/local transport
 export { assertChannel, CHANNEL_KINDS, createLoopbackBus, createLoopbackChannel,pickChannel } from './channel.js';
 
+// BLE game payloads — 21-byte detect/decode frames for manufacturer data tests
+export {
+  BLE_GAME_FRAME_LEN,
+  BLE_GAME_KIND,
+  BLE_GAME_MAGIC,
+  BLE_GAME_PAYLOAD_BYTES,
+  BLE_GAME_VERSION,
+  decodeBleGameTransfer,
+  detectBleGameFrame,
+  encodeBleGameFrame,
+  encodeBleGameTransfer,
+} from './blegame.js';
+
 // modem — send bytes over sound (FSK codec)
 export { decode, DEFAULT_MODEM,encode, modemBand } from './modem.js';
 
