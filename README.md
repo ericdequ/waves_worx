@@ -15,6 +15,13 @@ Extracted and generalized from BEV's `bevnet` transport layer and its
 multiplayer game-pairing handshake (which shipped with a parity test suite).
 Pure JavaScript, zero dependencies, node-testable.
 
+> **Also in this repo:** [`AD2/`](AD2) grew into a small **wave-computing
+> curriculum** — a physical-layer sensing backend (the Analog Discovery 2 bench)
+> and then how far classical waves reach toward quantum-class math: gate
+> emulation, Grover, the QFT, an Ising machine, interference MVM, and reservoir
+> computing. **Start at [`AD2/README.md`](AD2/README.md).** The Go side adds
+> `go/ad2ml` (feature extraction) and `go/mlvswave` (wave-compute vs ML).
+
 ## The stack
 
 ```
@@ -121,6 +128,15 @@ room-code normalization, and proximity verify / noise-tolerance / anti-spoof.
   ultrasonic `AudioContext` driver for the modem (`encode` → oscillator,
   mic FFT → `decode`), a camera/light observer for the proximity proof — each a
   drop-in `{ kind, send, subscribe }`.
+- **AD2 bench backend — landed** (`AD2/`). A Digilent Analog Discovery 2 plays
+  the modem's tones out of the AWG and captures them on the scope; pure-JS
+  Goertzel recovers them (`AD2/src/dsp.js`) and `senseFeatures` extracts a
+  Pidar-style feature map. The DSP is node-testable against a `createMockDevice`
+  synthesizer; `AD2/python/ad2_driver.py` is the thin real-hardware adapter. See
+  [`AD2/README.md`](AD2/README.md) — also the working model of "Pidar sensing".
+- **BLE game transfer frames — landed** (`src/blegame.js`). A pure 21-byte frame
+  codec models BLE manufacturer-data-sized arcade/game payloads, with detect /
+  decode tests for corruption, out-of-order transfers, and loopback delivery.
 - **Go mesh core — landed** (`go/`, module `github.com/ericdequ/waves_worx/go`).
   BEV's `bevcore/transport` was decoupled from the BEV core (registry inversion;
   `bevcore` now has 0 transport deps) and lifted here as a standalone stdlib-only
@@ -143,4 +159,9 @@ API, a pattern worth generalizing — don't work around it locally:
 
 ### Usage learnings
 
-- _(append discoveries here as the library gets used — date + project + the change)_
+- 2026-06-07 · BEV/AD2 — added `AD2/` as the first real channel backend (Digilent
+  Analog Discovery 2). Confirmed the "pure codec + thin adapter" pattern holds at
+  the hardware layer: the existing `modem.encode/decode` needed zero changes — the
+  backend only adds samples→tones recovery (Goertzel) and a device contract whose
+  mock synthesizes what a wire loopback would capture. Doubles as the `Pidar
+  sensing` model (signal → classical feature map → meaning, vectors deferred).

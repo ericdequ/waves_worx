@@ -5,11 +5,15 @@
   "type": "module",
   "main": "./src/index.js",
   "exports": {
-    ".": "./src/index.js"
+    ".": "./src/index.js",
+    "./ad2": "./AD2/src/index.js"
   },
-  "files": ["src/"],
+  "files": ["src/", "AD2/"],
   "scripts": {
-    "test": "node --test test/*.test.mjs"
+    "test": "node --test test/*.test.mjs AD2/test/*.test.mjs",
+    "test:ble": "node --test test/ble-game-transfer.test.mjs",
+    "test:ad2": "node --test AD2/test/*.test.mjs",
+    "test:go": "go -C go test ./..."
   },
   "license": "MIT"
 }

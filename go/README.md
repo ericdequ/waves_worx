@@ -23,6 +23,8 @@ transport/nfc        NFC handshake encode/decode
 transport/uwb        UWB ranging record/latest
 transport/wifi       Wi-Fi LAN encode/decode
 transport/vlc        visible-light comms encode/decode
+ad2ml                stdlib AD2/Pidar feature extraction for Go ML/EPU adapters
+mlvswave             CPU-safe ML vs wave-compute accuracy/latency experiment
 ```
 
 ## Use
@@ -38,6 +40,31 @@ import "github.com/ericdequ/waves_worx/go/transport"
 agg := transport.NewAggregator()
 // record peer observations across vectors, read fused trust, pick a fallback…
 ```
+
+AD2/Pidar feature extraction:
+
+```go
+import "github.com/ericdequ/waves_worx/go/ad2ml"
+
+features := ad2ml.SenseFeatures(samples, 48000, ad2ml.DefaultConfig())
+tensorish := features.FeatureVector32()
+```
+
+`ad2ml` is intentionally stdlib-only. It gives Gonum, GoMLX, Python tensor jobs,
+and future EPU services a stable feature shape without requiring those heavier
+libraries in the core module.
+
+ML vs wave-compute comparison:
+
+```bash
+env GOCACHE=/tmp/go-build-cache go test -v ./mlvswave
+env GOCACHE=/tmp/go-build-cache go test -bench . ./mlvswave
+```
+
+`mlvswave` keeps the comparison honest on an RX 480 era machine: the classical
+path is Goertzel argmax, while the ML path learns from the same band-energy
+features. GPU acceleration can replace the classifier later, but the baseline
+accuracy/latency harness remains the same.
 
 The `Apply*` functions take/return JSON strings, so the module drops behind a
 single string-in/string-out bridge (gomobile, WASM `syscall/js`, or a Cloudflare
